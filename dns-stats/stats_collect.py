@@ -2,6 +2,7 @@ import numpy             as np
 import os
 
 # Initialize figure
+count=0
 a = 1.66; ny= 500;
 utau=1.00101;
 y_ret = np.tanh(a*(2*np.arange(-1,ny+2)/(1.0*ny)-1))/np.tanh(a)+1
@@ -14,18 +15,20 @@ for i in direct:
     print(h)
     files = os.listdir(path = h)
     num = len(files)
-    os.chdir(h)
-    print(os.getcwd())
-    for i in range(len(files)):
-      # Read data
-      print(files[i])
-      data = np.fromfile(files[i],count=((ny+3)*5+1))
-      datatemp += data
-    datatemp = datatemp / num
-    databis += datatemp
-    datatemp = np.zeros([(ny+3)*5+1], dtype=np.float64)
-    os.chdir('../')
-databis = databis / len(direct)
+    if num != 0: #check the presence of stats
+     count += 1
+     os.chdir(h)
+     print(os.getcwd())
+     for i in range(num):
+       # Read data
+       print(files[i])
+       data = np.fromfile(files[i],count=((ny+3)*5+1))
+       datatemp += data
+     datatemp = datatemp / num
+     databis += datatemp
+     datatemp = np.zeros([(ny+3)*5+1], dtype=np.float64)
+     os.chdir('../')
+databis = databis / count
 statist = open('stat_bin.dat', "wb")
 statist.write(bytes(databis))
 data_save = databis[1:].reshape(5,ny+3)
