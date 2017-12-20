@@ -12,6 +12,11 @@ datatemp = np.zeros([(ny+3)*5+1] , dtype=np.float64)
 direct = range(2,15)
 for i in direct:
     h = str(i)
+    os.chdir(h)
+    if os.path.isfile('Runtimedata'):
+     os.remove('Runtimedata')
+     os.remove('Powerdata')
+    os.chdir('../')
     print(h)
     files = os.listdir(path = h)
     num = len(files)
